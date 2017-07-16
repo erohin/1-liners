@@ -29,11 +29,13 @@
 - [drop](#drop)
 - [endsWith](#endswith)
 - [endsWithAt](#endswithat)
+- [entries](#entries)
 - [equal](#equal)
 - [every](#every)
 - [exec](#exec)
 - [explode](#explode)
 - [filter](#filter)
+- [findKey](#findkey)
 - [flatMap](#flatmap)
 - [flip](#flip)
 - [fold](#fold)
@@ -59,6 +61,7 @@
 - [isNumber](#isnumber)
 - [isObject](#isobject)
 - [isPlainObject](#isplainobject)
+- [isPrototypeOf](#isprototypeof)
 - [isString](#isstring)
 - [isTrue](#istrue)
 - [isTruthy](#istruthy)
@@ -88,6 +91,7 @@
 - [nth](#nth)
 - [omit](#omit)
 - [or](#or)
+- [partial](#partial)
 - [pick](#pick)
 - [pipe](#pipe)
 - [pipeAll](#pipeall)
@@ -97,6 +101,7 @@
 - [propertyIsEnumerable](#propertyisenumerable)
 - [push](#push)
 - [put](#put)
+- [range](#range)
 - [reduce](#reduce)
 - [reduceRight](#reduceright)
 - [repeat](#repeat)
@@ -118,6 +123,7 @@
 - [test](#test)
 - [times](#times)
 - [toLowerCase](#tolowercase)
+- [toType](#totype)
 - [toUpperCase](#touppercase)
 - [trim](#trim)
 - [uncurry](#uncurry)
@@ -591,6 +597,27 @@ endsWithAt(2, 'stoeffel', 'nope');  // => false
 </sup></div>
 
 
+### entries
+
+Returns an array of a given object's own enumerable property [key, value] pairs
+Same as `Object.keys(obj).map(key => [key, obj[key]])`.
+
+```js
+const entries = require('1-liners/entries');
+
+entries({ foo: 'bar', baz: 42 }); // => [ ['foo', 'bar'], ['baz', 42] ]
+entries(['foo', 'bar', 'baz']); // => [ [0, 'foo'], [1, 'bar'], [2, 'baz'] ]
+entries({ foo: 'bar', [Symbol('baz')]: 42 }); // => [ ['foo', 'bar'] ]
+entries('foo'); // => [ ['0', 'f'], ['1', 'o'], ['2', 'o'] ]
+```
+
+<div align="right"><sup>
+	<a href="../tests/entries.js">Spec</a>
+	•
+	<a href="../module/entries.js">Source</a>: <code> (obj) =&gt; Object.keys(obj).map(key =&gt; [key, obj[key]]);</code>
+</sup></div>
+
+
 ### equal
 
 Same as `a === b`.
@@ -680,6 +707,25 @@ filter(isOdd, [1, 2, 3]); // => [1, 3]
 	<a href="../tests/filter.js">Spec</a>
 	•
 	<a href="../module/filter.js">Source</a>: <code> (filter, arr) =&gt; arr.filter(filter);</code>
+</sup></div>
+
+
+### findKey
+
+A pure function to find key from object, matching a predicate
+similar to https://lodash.com/docs/4.17.4#findKey or Array.findIndex()
+
+```js
+const findKey = require('1-liners/findKey');
+
+const data = { a: 1, b: 2, c: 3 };
+findKey((x) => x > 2, data); // => 'c'
+```
+
+<div align="right"><sup>
+	<a href="../tests/findKey.js">Spec</a>
+	•
+	<a href="../module/findKey.js">Source</a>: <code> (fn, obj) =&gt; Object.keys(obj).find(k =&gt; fn(obj[k]));</code>
 </sup></div>
 
 
@@ -1177,6 +1223,30 @@ isPlainObject(/anything else/);      // => false
 	<a href="../tests/isPlainObject.js">Spec</a>
 	•
 	<a href="../module/isPlainObject.js">Source</a>: <code> (value) =&gt; (value &amp;&amp; typeof value === 'object' &amp;&amp; (value.__proto__ == null || value.__proto__ === Object.prototype));</code>
+</sup></div>
+
+
+### isPrototypeOf
+
+Check if an object's prototype exists in another object's prototype chain
+
+```js
+function Foo(){};
+function Bar(){};
+
+Bar.prototype = new Foo();
+
+const foo = new Foo();
+const bar = new Bar();
+
+Foo.prototype.isPrototypeOf(bar); // => true
+Bar.prototype.isPrototypeOf(foo); // => false
+```
+
+<div align="right"><sup>
+	<a href="../tests/isPrototypeOf.js">Spec</a>
+	•
+	<a href="../module/isPrototypeOf.js">Source</a>: <code> (prototypeObj, obj) =&gt; prototypeObj.prototype.isPrototypeOf(obj)</code>
 </sup></div>
 
 
@@ -1733,6 +1803,27 @@ or(false, false); // => false
 </sup></div>
 
 
+### partial
+
+Partially apply a function.
+
+```js
+const partial = require('1-liners/partial');
+
+const add = (a, b, c) => a + b + c;
+
+ const fivePlus = (add, 2, 3);
+
+ fivePlus(4) === 9
+```
+
+<div align="right"><sup>
+	<a href="../tests/partial.js">Spec</a>
+	•
+	<a href="../module/partial.js">Source</a>: <code> (f, ...args) =&gt; (...moreArgs) =&gt; f(...args, ...moreArgs);</code>
+</sup></div>
+
+
 ### pick
 
 Copies only specified `properties` from an `object` into a new object.
@@ -1896,6 +1987,24 @@ put('name', 'stoeffel', object);  // => { id: 1, name: 'stoeffel' }
 </sup></div>
 
 
+### range
+
+A pure function to generate a range of numbers
+from start(including) to end(excluding)
+
+```js
+const range = require('1-liners/range');
+
+range(1, 5); // => [1, 2, 3, 4, 5]
+```
+
+<div align="right"><sup>
+	<a href="../tests/range.js">Spec</a>
+	•
+	<a href="../module/range.js">Source</a>: <code> (start, end) =&gt; Array.from({length: (end - start)}, (v, k) =&gt; k + start);</code>
+</sup></div>
+
+
 ### reduce
 
 Same as `[1, 2, 3].reduce(sum)`.
@@ -1909,7 +2018,7 @@ reduce(sum, [1, 2, 3]); // => 6
 <div align="right"><sup>
 	<a href="../tests/reduce.js">Spec</a>
 	•
-	<a href="../module/reduce.js">Source</a>: <code> (reduce, arr) =&gt; arr.reduce(reduce);</code>
+	<a href="../module/reduce.js">Source</a>: <code> (func, arr) =&gt; arr.reduce(func);</code>
 </sup></div>
 
 
@@ -2274,6 +2383,33 @@ toLowerCase('HALLO') // => 'hallo'
 	<a href="../tests/toLowerCase.js">Spec</a>
 	•
 	<a href="../module/toLowerCase.js">Source</a>: <code> (str) =&gt; str.toLowerCase();</code>
+</sup></div>
+
+
+### toType
+
+typeOf is a function that return the true type of a variable.
+
+```js
+import toType from '1-liners/toType';
+
+ toType({a: 4}); //"object"
+ toType([1, 2, 3]); //"array"
+ (function() {console.log(toType(arguments))})(); //arguments
+ toType(new ReferenceError); //"error"
+ toType(new Date); //"date"
+ toType(/a-z/); //"regexp"
+ toType(Math); //"math"
+ toType(JSON); //"json"
+ toType(new Number(4)); //"number"
+ toType(new String("abc")); //"string"
+ toType(new Boolean(true)); //"boolean"
+```
+
+<div align="right"><sup>
+	<a href="../tests/toType.js">Spec</a>
+	•
+	<a href="../module/toType.js">Source</a>: <code> (obj) =&gt; ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();</code>
 </sup></div>
 
 

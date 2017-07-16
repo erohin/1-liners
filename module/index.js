@@ -22,11 +22,13 @@ import dec from './dec';
 import drop from './drop';
 import endsWith from './endsWith';
 import endsWithAt from './endsWithAt';
+import entries from './entries';
 import equal from './equal';
 import every from './every';
 import exec from './exec';
 import explode from './explode';
 import filter from './filter';
+import findKey from './findKey';
 import flatMap from './flatMap';
 import flip from './flip';
 import fold from './fold';
@@ -52,6 +54,7 @@ import isNull from './isNull';
 import isNumber from './isNumber';
 import isObject from './isObject';
 import isPlainObject from './isPlainObject';
+import isPrototypeOf from './isPrototypeOf';
 import isString from './isString';
 import isTrue from './isTrue';
 import isTruthy from './isTruthy';
@@ -81,6 +84,7 @@ import not from './not';
 import nth from './nth';
 import omit from './omit';
 import or from './or';
+import partial from './partial';
 import pick from './pick';
 import pipe from './pipe';
 import pipeAll from './pipeAll';
@@ -90,6 +94,7 @@ import property from './property';
 import propertyIsEnumerable from './propertyIsEnumerable';
 import push from './push';
 import put from './put';
+import range from './range';
 import reduce from './reduce';
 import reduceRight from './reduceRight';
 import repeat from './repeat';
@@ -111,6 +116,7 @@ import takeWhile from './takeWhile';
 import test from './test';
 import times from './times';
 import toLowerCase from './toLowerCase';
+import toType from './toType';
 import toUpperCase from './toUpperCase';
 import trim from './trim';
 import uncurry from './uncurry';
@@ -144,11 +150,13 @@ export {
   drop,
   endsWith,
   endsWithAt,
+  entries,
   equal,
   every,
   exec,
   explode,
   filter,
+  findKey,
   flatMap,
   flip,
   fold,
@@ -174,6 +182,7 @@ export {
   isNumber,
   isObject,
   isPlainObject,
+  isPrototypeOf,
   isString,
   isTrue,
   isTruthy,
@@ -203,6 +212,7 @@ export {
   nth,
   omit,
   or,
+  partial,
   pick,
   pipe,
   pipeAll,
@@ -212,6 +222,7 @@ export {
   propertyIsEnumerable,
   push,
   put,
+  range,
   reduce,
   reduceRight,
   repeat,
@@ -233,6 +244,7 @@ export {
   test,
   times,
   toLowerCase,
+  toType,
   toUpperCase,
   trim,
   uncurry,
