@@ -34,6 +34,7 @@ import flip from './flip';
 import fold from './fold';
 import foldRight from './foldRight';
 import forEach from './forEach';
+import get from './get';
 import greaterOrEqual from './greaterOrEqual';
 import greaterThan from './greaterThan';
 import hasOwnProperty from './hasOwnProperty';
@@ -62,6 +63,7 @@ import isTypeOf from './isTypeOf';
 import isUndefined from './isUndefined';
 import isUnknown from './isUnknown';
 import join from './join';
+import keyBy from './keyBy';
 import keys from './keys';
 import last from './last';
 import lastIndexOf from './lastIndexOf';
@@ -83,8 +85,10 @@ import normalize from './normalize';
 import not from './not';
 import nth from './nth';
 import omit from './omit';
+import once from './once';
 import or from './or';
 import partial from './partial';
+import partition from './partition';
 import pick from './pick';
 import pipe from './pipe';
 import pipeAll from './pipeAll';
@@ -119,9 +123,12 @@ import toLowerCase from './toLowerCase';
 import toType from './toType';
 import toUpperCase from './toUpperCase';
 import trim from './trim';
+import truncate from './truncate';
 import uncurry from './uncurry';
 import uncurry3 from './uncurry3';
 import unfold from './unfold';
+import uniq from './uniq';
+import uniqBy from './uniqBy';
 import values from './values';
 import xor from './xor';
 
@@ -162,6 +169,7 @@ export {
   fold,
   foldRight,
   forEach,
+  get,
   greaterOrEqual,
   greaterThan,
   hasOwnProperty,
@@ -190,6 +198,7 @@ export {
   isUndefined,
   isUnknown,
   join,
+  keyBy,
   keys,
   last,
   lastIndexOf,
@@ -211,8 +220,10 @@ export {
   not,
   nth,
   omit,
+  once,
   or,
   partial,
+  partition,
   pick,
   pipe,
   pipeAll,
@@ -247,9 +258,12 @@ export {
   toType,
   toUpperCase,
   trim,
+  truncate,
   uncurry,
   uncurry3,
   unfold,
+  uniq,
+  uniqBy,
   values,
   xor
 };

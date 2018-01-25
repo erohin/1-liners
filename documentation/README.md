@@ -41,6 +41,7 @@
 - [fold](#fold)
 - [foldRight](#foldright)
 - [forEach](#foreach)
+- [get](#get)
 - [greaterOrEqual](#greaterorequal)
 - [greaterThan](#greaterthan)
 - [hasOwnProperty](#hasownproperty)
@@ -69,6 +70,7 @@
 - [isUndefined](#isundefined)
 - [isUnknown](#isunknown)
 - [join](#join)
+- [keyBy](#keyby)
 - [keys](#keys)
 - [last](#last)
 - [lastIndexOf](#lastindexof)
@@ -90,8 +92,10 @@
 - [not](#not)
 - [nth](#nth)
 - [omit](#omit)
+- [once](#once)
 - [or](#or)
 - [partial](#partial)
+- [partition](#partition)
 - [pick](#pick)
 - [pipe](#pipe)
 - [pipeAll](#pipeall)
@@ -126,9 +130,12 @@
 - [toType](#totype)
 - [toUpperCase](#touppercase)
 - [trim](#trim)
+- [truncate](#truncate)
 - [uncurry](#uncurry)
 - [uncurry3](#uncurry3)
 - [unfold](#unfold)
+- [uniq](#uniq)
+- [uniqBy](#uniqby)
 - [values](#values)
 - [xor](#xor)
 
@@ -817,6 +824,24 @@ forEach(i => console.log('Item: ' + i), [9, 25]); // => logs "Item: 9" and "Item
 </sup></div>
 
 
+### get
+
+Gets the value at path of object.
+
+```js
+const get = require('1-liners/get');
+
+ let obj = { a: { b: 42 } };
+ get('a.b', obj); // => 42
+```
+
+<div align="right"><sup>
+	<a href="../tests/get.js">Spec</a>
+	•
+	<a href="../module/get.js">Source</a>: <code> (path, obj) =&gt; path.split('.').reduce((acc, current) =&gt; acc &amp;&amp; acc[current], obj);</code>
+</sup></div>
+
+
 ### greaterOrEqual
 
 Same as `a >= b`.
@@ -1399,6 +1424,23 @@ join('-', [1, 'liners']); // => '1-liners'
 </sup></div>
 
 
+### keyBy
+
+Creates an object composed of keys generated from the results of running each element of `collection` thru `iteratee`.
+
+```js
+const keyBy = require('1-liners/keyBy');
+const array = [{id: 1, name: 'One'}, {id: 2, name: 'Two'}];
+const dict = keyBy(array, o => o.id); // => {1: {id: 1, name: 'One'}, 2: {id: 2, name: 'Two'} }
+```
+
+<div align="right"><sup>
+	<a href="../tests/keyBy.js">Spec</a>
+	•
+	<a href="../module/keyBy.js">Source</a>: <code> (array, iteratee) =&gt; array.reduce((result, item) =&gt; (result[iteratee(item)] = item, result), {});</code>
+</sup></div>
+
+
 ### keys
 
 Same as [`Object.keys(obj)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys).
@@ -1784,6 +1826,25 @@ omit(['foo', 'baz'], object);  // => {bar: 2}
 </sup></div>
 
 
+### once
+
+Creates a function that is restricted to invoking passed function once.
+
+```js
+const once = require('1-liners/once');
+let count = 0;
+let countOnce = once(() => ++count);
+countOnce(); // => 1, (count = 1)
+countOnce(); // => 1, (count = 1)
+```
+
+<div align="right"><sup>
+	<a href="../tests/once.js">Spec</a>
+	•
+	<a href="../module/once.js">Source</a>: <code> (fn) =&gt; ((first = true) =&gt; () =&gt; first ? (first = !first, fn = fn()) : fn)();</code>
+</sup></div>
+
+
 ### or
 
 Same as `a || b`.
@@ -1821,6 +1882,24 @@ const add = (a, b, c) => a + b + c;
 	<a href="../tests/partial.js">Spec</a>
 	•
 	<a href="../module/partial.js">Source</a>: <code> (f, ...args) =&gt; (...moreArgs) =&gt; f(...args, ...moreArgs);</code>
+</sup></div>
+
+
+### partition
+
+Creates an array of elements split into two groups, the first of which contains elements `predicate` returns truthy for,
+the second of which contains elements `predicate` returns falsey for. The predicate is invoked with one argument: `(value)`.
+
+```js
+const partition = require('1-liners/partition');
+
+const [even, odd] = partition([1, 2, 3, 4], n => n % 2 === 0); // => even: [2, 4], odd: [1, 3]
+```
+
+<div align="right"><sup>
+	<a href="../tests/partition.js">Spec</a>
+	•
+	<a href="../module/partition.js">Source</a>: <code> (array, predicate) =&gt; array.reduce((result, item) =&gt; (result[Number(!predicate(item))].push(item), result), [[], []]);</code>
 </sup></div>
 
 
@@ -2447,6 +2526,24 @@ trim('  super  ') // => super
 </sup></div>
 
 
+### truncate
+
+Truncate string when longer than maxLength and add the Unicode Character horizontal ellipsis keeping the total within maxLength.
+
+```js
+const truncate = require('1-liners/truncate');
+
+truncate('super', 5) // => super
+truncate('super', 4) // => sup…
+```
+
+<div align="right"><sup>
+	<a href="../tests/truncate.js">Spec</a>
+	•
+	<a href="../module/truncate.js">Source</a>: <code> (str, maxLength) =&gt; str.length &gt; maxLength ? `${str.substr(0, maxLength - 1)}…` : str</code>
+</sup></div>
+
+
 ### uncurry
 
 Uncurry a function – collapse 2 lists of parameters into one.
@@ -2506,16 +2603,47 @@ unfold(fn, 10); // => [10,11,12,13,14,15,16,17,18,19]
 // range in terms of unfold
 const range = (from, to) => unfold((seed) => seed < to ? [seed, seed + 1] : false, from);
 range(1, 10); // => [1,2,3,4,5,6,7,8,9]
-
-// unnest in terms of unfold
-const unnest = xs => unfold((seed) => seed < xs.length ? [xs[seed], seed + 1] : false , 0);
-unnest([[1, 2], [3, 4], [5, 6]]); // => [1,2,3,4,5,6]
 ```
 
 <div align="right"><sup>
 	<a href="../tests/unfold.js">Spec</a>
 	•
-	<a href="../module/unfold.js">Source</a>: <code> function unfold (fn, seed, acc = []) { return fn(seed) ? unfold(fn, fn(seed)[1], acc.concat.apply(acc, [fn(seed)[0]])) : acc }</code>
+	<a href="../module/unfold.js">Source</a>: <code> function unfold (fn, seed, acc = [], next = fn(seed)) { return next ? unfold(fn, next[1], [...acc, next[0]]) : acc }</code>
+</sup></div>
+
+
+### uniq
+
+Creates a duplicate-free version of an array.
+
+```js
+const uniq = require('1-liners/uniq');
+
+uniq([1, 2, 2]); // => [1, 2]
+```
+
+<div align="right"><sup>
+	<a href="../tests/uniq.js">Spec</a>
+	•
+	<a href="../module/uniq.js">Source</a>: <code> (array) =&gt; array.filter((value, index, self) =&gt; index === self.findIndex(other =&gt; other === value));</code>
+</sup></div>
+
+
+### uniqBy
+
+Remove duplicates from an array of objects by invoking `iteratee` for each object.
+
+```js
+const get = require('1-liners/uniqBy');
+
+let array = [{ id: 1 }, { id: 2 }, { id: 1 }];
+uniqBy(array, o => o.id); // => [{ id: 1 }, { id: 2 }]
+```
+
+<div align="right"><sup>
+	<a href="../tests/uniqBy.js">Spec</a>
+	•
+	<a href="../module/uniqBy.js">Source</a>: <code> (array, iteratee) =&gt; array.filter((value, index, self) =&gt; index === self.findIndex(other =&gt; iteratee(other) === iteratee(value)));</code>
 </sup></div>
 
 
